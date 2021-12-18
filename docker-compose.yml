@@ -1,10 +1,63 @@
 version: '3'
 
 services:
-  # set the values in .env for your system
   db:
     image: "mariadb:10.7"
     ports:
       - "3306:3306"
     env_file:
-      - .env
+      - .env # set the values in .env for your system
+    volumes:
+      - db-data:/var/lib/mysql
+    # https://stackoverflow.com/a/69858375
+    # https://github.com/MariaDB/mariadb-docker/issues/94#issuecomment-427988670
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-h0.0.0.0", "-u$MARIADB_USER", "-p$MARIADB_PASSWORD", "ping", "--silent"]
+      interval: 1s
+      retries: 120
+  
+  app:
+    build: .
+    environment:
+      HOTLINE_CONFIG_PATH: /hotline.yml
+      HOTLINE_APP: app
+    volumes:
+      - ./hotline.yml:/hotline.yml:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  
+  http-cb:
+    build: .
+    environment:
+      HOTLINE_CONFIG_PATH: /hotline.yml
+      HOTLINE_APP: http
+    volumes:
+      - ./hotline.yml:/hotline.yml:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      app:
+        condition: service_healthy
+  
+  # dns-cb:
+  #   build: .
+  #   environment:
+  #     HOTLINE_CONFIG_PATH: /hotline.yml
+  #     HOTLINE_APP: dns
+  #   volumes:
+  #     - ./hotline.yml:/hotline.yml:ro
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #     app:
+  #       condition: service_healthy
+
+volumes:
+  db-data:

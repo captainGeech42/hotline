@@ -8,8 +8,12 @@ import (
 )
 
 func LoadConfig(path string) *Config {
-	// TODO make this try to load from an env var too
 	config := &Config{}
+
+	// check if $HOTLINE_CONFIG_PATH is set
+	if val, exists := os.LookupEnv("HOTLINE_CONFIG_PATH"); exists {
+		path = val
+	}
 
 	raw, err := ioutil.ReadFile(os.ExpandEnv(path))
 	if err != nil {

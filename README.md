@@ -5,7 +5,7 @@ DNS/HTTP request logging app
 
 ## Config:
 
-For a client, you can omit the `server` block. The below sample config shows all possible values
+For a client, you can omit the `server` block. The below sample config shows all possible values. Please note that the default Dockerfile only exposes port 8080/tcp and 53/[tcp,udp].
 
 ```yml
 ---

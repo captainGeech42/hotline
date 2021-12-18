@@ -14,6 +14,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func healthCheck(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("app good to go"))
+}
+
 // Start the webapp HTTP server. This handled the frontend and backend API routes
 func StartApp(cfg *config.Config) {
 	// seed rand for callback name generation
@@ -22,6 +26,7 @@ func StartApp(cfg *config.Config) {
 	// define the top level router
 	router := mux.NewRouter()
 	router.Use(loggingMiddleware)
+	router.HandleFunc("/healthcheck", healthCheck)
 
 	// create subrouters for the backend and frontend packages
 	backendRouter := router.PathPrefix("/api").Subrouter()
