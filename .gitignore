@@ -14,3 +14,8 @@ hotline
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# Configuration
+hotline.yml
+.hotline.yml
+.env

@@ -11,13 +11,17 @@ func GetCallback(cbName string) *Callback {
 
 	var cb Callback
 
-	result := dbHandle.Where("name = ?", cbName).First(&cb)
+	result := dbHandle.Where("name = ?", cbName).Limit(1).Find(&cb)
 	if result.Error != nil {
 		log.Println(result.Error)
 		return nil
 	}
 
-	return &cb
+	if result.RowsAffected == 1 {
+		return &cb
+	} else {
+		return nil
+	}
 }
 
 func CreateCallback(cbName string) *Callback {

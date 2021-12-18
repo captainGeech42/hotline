@@ -12,7 +12,7 @@ import (
 var dbHandle *gorm.DB = nil
 
 // https://gorm.io/docs/connecting_to_the_database.html
-func ConnectToDb(cfg config.Database) {
+func ConnectToDb(cfg config.Database) bool {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		cfg.Username, cfg.Password, cfg.Host, cfg.Port, cfg.DbName)
 
@@ -21,5 +21,11 @@ func ConnectToDb(cfg config.Database) {
 		log.Fatalln(err)
 	}
 
+	log.Println("successfully connected to database")
+
+	db.AutoMigrate(&Callback{}, &HttpRequest{}, &DnsRequest{})
+	log.Println("ran db migrations")
+
 	dbHandle = db
+	return true
 }

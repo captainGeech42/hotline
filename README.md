@@ -5,6 +5,8 @@ DNS/HTTP request logging app
 
 ## Config:
 
+For a client, you can omit the `server` block. The below sample config shows all possible values
+
 ```yml
 ---
 server:
@@ -22,9 +24,9 @@ server:
   db:
     host: "localhost"
     port: 3306
-    username: "asdf"
-    password: "zxcv"
+    username: "dbuser"
+    password: "put_a_secure_pass_here"
     dbname: "hotline"
 client:
-  server_url: ""
+  server_url: "http://otherdomain.abc"
 ```

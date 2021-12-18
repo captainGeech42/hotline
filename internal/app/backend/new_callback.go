@@ -15,6 +15,7 @@ type newCallbackRequest struct {
 
 type newCallbackResponse struct {
 	response
+	Name string `json:"name"`
 }
 
 // POST /api/v1/callback
@@ -44,26 +45,23 @@ func newCallback(w http.ResponseWriter, r *http.Request) {
 	// check if cb exists
 	cb := db.GetCallback(cbReq.Name)
 	if cb == nil {
-		// cb doesn't exist, make it
-		cb = db.CreateCallback(cbReq.Name)
+		// cb doesn't exist, generate a new one
+		cbName := generateCallbackName()
+		cb = db.CreateCallback(cbName)
+
 		if cb == nil {
 			cbResp.Error = true
 			cbResp.Message = "failed to create callback"
-
+		} else {
+			cbResp.Message = "new callback created"
+			cbResp.Name = cb.Name
 		}
-		cbResp.Message = "new callback created"
 	} else {
+		// cb already exists, use that one
 		cbResp.Message = "using existing callback"
+		cbResp.Name = cbReq.Name
 	}
 
 	// send response
-	b, err := json.Marshal(cbResp)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(500)
-		return
-	}
-
-	w.WriteHeader(200)
-	w.Write(b)
+	sendResponse(w, cbResp)
 }
