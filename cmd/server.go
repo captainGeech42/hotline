@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/captainGeech42/hotline/internal/app"
+	"github.com/captainGeech42/hotline/internal/callback/http"
 	"github.com/captainGeech42/hotline/internal/config"
 	"github.com/spf13/cobra"
 )
@@ -26,12 +27,14 @@ var ServerCommand = &cobra.Command{
 			log.Println("starting dns callback server")
 		case "http":
 			log.Println("starting http callback server")
+
+			http.StartServer(config)
 		case "app":
 			log.Println("starting app server")
 
 			app.StartApp(config)
 		default:
-			log.Fatalln("You must set $HOTLINE_APP to dns, http, or app")
+			log.Fatalln("failed to launch server: you must set $HOTLINE_APP to dns, http, or app")
 		}
 	},
 }

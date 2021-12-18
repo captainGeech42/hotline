@@ -8,6 +8,7 @@ import (
 )
 
 func LoadConfig(path string) *Config {
+	// TODO make this try to load from an env var too
 	config := &Config{}
 
 	raw, err := ioutil.ReadFile(os.ExpandEnv(path))

@@ -14,11 +14,11 @@ server:
     domain: "mydomain.xyz"
     http:
       port: 8080
-      default_response: "research by @captainGeech using hotline"
+      default_response: "research by @captainGeech42 using hotline"
     dns:
       port: 53
       default_A_response: 1.2.3.4
-      default_TXT_response: "research by @captainGeech using hotline"
+      default_TXT_response: "research by @captainGeech42 using hotline"
   app:
     port: 8080
   db:

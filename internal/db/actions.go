@@ -49,6 +49,7 @@ func AddDnsRequest(cbName string, request string, srcIP string) {
 	// get the associated callback record
 	cb := GetCallback(cbName)
 	if cb == nil {
+		log.Printf("tried to save DNS request for callback that doesn't exist: %s\n", cbName)
 		return
 	}
 
@@ -64,7 +65,7 @@ func AddDnsRequest(cbName string, request string, srcIP string) {
 }
 
 // these should be base64 encoded before coming into this function
-func AddHttpRequest(cbName string, url string, headers string, body string, srcIP string) {
+func AddHttpRequest(cbName string, uri string, host string, method string, headers string, body string, srcIP string) {
 	if dbHandle == nil {
 		log.Panicf("dbHandle is nil!")
 	}
@@ -72,10 +73,11 @@ func AddHttpRequest(cbName string, url string, headers string, body string, srcI
 	// get the associated callback record
 	cb := GetCallback(cbName)
 	if cb == nil {
+		log.Printf("tried to save HTTP request for callback that doesn't exist: %s\n", cbName)
 		return
 	}
 
-	httpReq := HttpRequest{SourceIP: srcIP, Url: url, Headers: headers, Body: body, Callback: *cb}
+	httpReq := HttpRequest{SourceIP: srcIP, URI: uri, Host: host, Method: method, Headers: headers, Body: body, Callback: *cb}
 
 	result := dbHandle.Create(&httpReq)
 

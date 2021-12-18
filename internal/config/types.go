@@ -2,7 +2,7 @@ package config
 
 type Http struct {
 	Port           int    `yaml:"port"`
-	DefaultReponse string `yaml:"default_reponse"`
+	DefaultReponse string `yaml:"default_response"`
 }
 
 type Dns struct {
