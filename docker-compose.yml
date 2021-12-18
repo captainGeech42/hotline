@@ -9,13 +9,11 @@ services:
       - .env # set the values in .env for your system
     volumes:
       - db-data:/var/lib/mysql
-    # https://stackoverflow.com/a/69858375
-    # https://github.com/MariaDB/mariadb-docker/issues/94#issuecomment-427988670
     healthcheck:
       test: ["CMD", "mysqladmin", "-h0.0.0.0", "-u$MARIADB_USER", "-p$MARIADB_PASSWORD", "ping", "--silent"]
       interval: 1s
       retries: 120
-  
+
   app:
     build: .
     environment:
@@ -32,7 +30,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-  
+ 
   http-cb:
     build: .
     environment:
@@ -45,7 +43,8 @@ services:
         condition: service_healthy
       app:
         condition: service_healthy
-  
+
+  # will be uncommented once dns callback is implemented
   # dns-cb:
   #   build: .
   #   environment:
