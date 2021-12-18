@@ -9,8 +9,8 @@ DNS/HTTP request logging app
 ---
 server:
   callback:
+    domain: "mydomain.xyz"
     http:
-      domain: "mydomain.xyz"
       port: 8080
       default_response: "research by @captainGeech using hotline"
     dns:

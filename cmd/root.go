@@ -15,7 +15,7 @@ Source available at https://github.com/captainGeech42/hotline`,
 }
 
 func Execute() {
-	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", "~/.hotline.yml", "Path to config file")
+	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", "$HOME/.hotline.yml", "Path to config file")
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)

@@ -2,6 +2,7 @@ package config
 
 import (
 	"io/ioutil"
+	"os"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -9,7 +10,7 @@ import (
 func LoadConfig(path string) *Config {
 	config := &Config{}
 
-	raw, err := ioutil.ReadFile(path)
+	raw, err := ioutil.ReadFile(os.ExpandEnv(path))
 	if err != nil {
 		panic(err)
 	}
