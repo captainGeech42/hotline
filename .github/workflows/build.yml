@@ -23,8 +23,6 @@ jobs:
       run: |
         go mod download
         pushd internal/app/frontend/spa
-        pwd
-        echo "testing hello 123"
         npm i
         npm run build
         popd
