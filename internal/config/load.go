@@ -2,6 +2,7 @@ package config
 
 import (
 	"io/ioutil"
+	"log"
 	"os"
 
 	yaml "gopkg.in/yaml.v2"
@@ -17,12 +18,13 @@ func LoadConfig(path string) *Config {
 
 	raw, err := ioutil.ReadFile(os.ExpandEnv(path))
 	if err != nil {
-		panic(err)
+		log.Fatalln("failed to load config:", err)
+		return nil
 	}
 
 	err = yaml.Unmarshal(raw, &config)
 	if err != nil {
-		panic(err)
+		log.Panicln(err)
 	}
 
 	return config

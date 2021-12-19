@@ -20,6 +20,9 @@ var ServerCommand = &cobra.Command{
 	Short: "Run the hotline server (set $HOTLINE_APP to configure which server to run)",
 	Run: func(cmd *cobra.Command, args []string) {
 		config := config.LoadConfig(configPath)
+		if config == nil {
+			return
+		}
 
 		hotlineApp := os.Getenv("HOTLINE_APP")
 
