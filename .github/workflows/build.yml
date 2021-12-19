@@ -14,7 +14,16 @@ jobs:
       with:
         go-version: 1.17.x
     
+    - name: Install Node/npm
+      uses: actions/setup-node@v2
+      with:
+        node-version: "16"
+    
     - name: Build
       run: |
         go get .
+        pushd internal/app/frontend/spa
+        npm i
+        npm run build
+        popd
         go build .
