@@ -15,7 +15,7 @@ import (
 
 var callbackDomain string
 var defaultAResponse net.IP
-var defaultTXTResponse string
+var defaultTXTResponse []string
 
 type dnsHandler struct{}
 
@@ -57,7 +57,7 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 	case dns.TypeTXT:
 		msg.Answer = append(msg.Answer, &dns.TXT{
 			Hdr: dns.RR_Header{Name: msg.Question[0].Name, Rrtype: dns.TypeTXT, Class: dns.ClassINET, Ttl: 60},
-			Txt: []string{defaultTXTResponse},
+			Txt: defaultTXTResponse,
 		})
 	default:
 		log.Printf("got an unsupported query type request, not sending a response: %v\n", qtype)
@@ -80,7 +80,7 @@ func StartServer(cfg *config.Config) {
 	// define global vars for responses
 	callbackDomain = cfg.Server.Callback.Domain
 	defaultAResponse = net.ParseIP(cfg.Server.Callback.Dns.DefaultAResponse)
-	defaultTXTResponse = cfg.Server.Callback.Dns.DefaultTXTResponse
+	defaultTXTResponse = []string{cfg.Server.Callback.Dns.DefaultTXTResponse}
 
 	// start the server
 	log.Printf("starting dns callback listener on %s\n", addr)
