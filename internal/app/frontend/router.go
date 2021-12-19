@@ -3,7 +3,6 @@ package frontend
 import (
 	"embed"
 	"io/fs"
-	"log"
 	"net/http"
 	"path"
 
@@ -23,22 +22,17 @@ type spaFS struct {
 	InnerFS *embed.FS
 }
 
+// fix the path when referencing the embedfs
+// see frontend.spaFS
 func (fs *spaFS) Open(name string) (fs.File, error) {
-	log.Println("called")
-
 	fixedPath := path.Join("spa", "build", name)
-	println(fixedPath)
-
-	log.Println("opening", fixedPath)
 
 	return fs.InnerFS.Open(fixedPath)
 }
 
 func ConfigureRouter(router *mux.Router) {
-	_, err := content.Open("/spa/build/index.html")
-	log.Println(err)
-
 	myFS := &spaFS{InnerFS: &content}
+	httpFS := http.FileServer(http.FS(myFS))
 
-	router.Handle("/", http.FileServer(http.FS(myFS)))
+	router.PathPrefix("/").Handler(httpFS)
 }
