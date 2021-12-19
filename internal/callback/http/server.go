@@ -44,6 +44,14 @@ func writeReqToDb(next http.Handler) http.Handler {
 		// in which they were sent by the client, because maps are unordered
 		headerString := ""
 		for k, vals := range r.Header {
+			// check if we got a X-Hotline-Real-IP header
+			// this is set by the hotline nginx config so we can log the real source IP
+			// this header shouldn't be exposed to the user
+			if k == "X-Hotline-Real-Ip" {
+				srcIP = vals[0]
+				continue
+			}
+
 			for _, v := range vals {
 				headerString += fmt.Sprintf("%s: %s\n", k, v)
 			}

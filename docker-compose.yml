@@ -14,6 +14,17 @@ services:
       interval: 1s
       retries: 120
 
+  proxy:
+    image: "nginx:latest"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/proxy.conf:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+      - http-cb
+
   app:
     build: .
     environment:
