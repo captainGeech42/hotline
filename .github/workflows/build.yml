@@ -21,7 +21,7 @@ jobs:
     
     - name: Build
       run: |
-        go get .
+        go mod download
         pushd internal/app/frontend/spa
         pwd
         echo "testing hello 123"
