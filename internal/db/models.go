@@ -23,6 +23,7 @@ type DnsRequest struct {
 	gorm.Model
 	SourceIP    string
 	RequestName string
+	QueryType   string
 	CallbackID  int // fkey to callback
 	Callback    Callback
 }

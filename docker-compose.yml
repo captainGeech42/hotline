@@ -55,19 +55,21 @@ services:
       app:
         condition: service_healthy
 
-  # will be uncommented once dns callback is implemented
-  # dns-cb:
-  #   build: .
-  #   environment:
-  #     HOTLINE_CONFIG_PATH: /hotline.yml
-  #     HOTLINE_APP: dns
-  #   volumes:
-  #     - ./hotline.yml:/hotline.yml:ro
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
-  #     app:
-  #       condition: service_healthy
+  dns-cb:
+    build: .
+    environment:
+      HOTLINE_CONFIG_PATH: /hotline.yml
+      HOTLINE_APP: dns
+    volumes:
+      - ./hotline.yml:/hotline.yml:ro
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    depends_on:
+      db:
+        condition: service_healthy
+      app:
+        condition: service_healthy
 
 volumes:
   db-data:

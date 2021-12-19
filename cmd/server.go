@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/captainGeech42/hotline/internal/app"
+	"github.com/captainGeech42/hotline/internal/callback/dns"
 	"github.com/captainGeech42/hotline/internal/callback/http"
 	"github.com/captainGeech42/hotline/internal/config"
 	"github.com/spf13/cobra"
@@ -25,6 +26,8 @@ var ServerCommand = &cobra.Command{
 		switch hotlineApp {
 		case "dns":
 			log.Println("starting dns callback server")
+
+			dns.StartServer(config)
 		case "http":
 			log.Println("starting http callback server")
 

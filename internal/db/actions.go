@@ -6,7 +6,7 @@ import (
 
 func GetCallback(cbName string) *Callback {
 	if dbHandle == nil {
-		log.Panicf("dbHandle is nil!")
+		log.Panicln("dbHandle is nil!")
 	}
 
 	var cb Callback
@@ -26,7 +26,7 @@ func GetCallback(cbName string) *Callback {
 
 func CreateCallback(cbName string) *Callback {
 	if dbHandle == nil {
-		log.Panicf("dbHandle is nil!")
+		log.Panicln("dbHandle is nil!")
 	}
 
 	cb := Callback{Name: cbName}
@@ -41,9 +41,9 @@ func CreateCallback(cbName string) *Callback {
 	return &cb
 }
 
-func AddDnsRequest(cbName string, request string, srcIP string) {
+func AddDnsRequest(cbName string, request string, queryType string, srcIP string) {
 	if dbHandle == nil {
-		log.Panicf("dbHandle is nil!")
+		log.Panicln("dbHandle is nil!")
 	}
 
 	// get the associated callback record
@@ -53,7 +53,7 @@ func AddDnsRequest(cbName string, request string, srcIP string) {
 		return
 	}
 
-	dnsReq := DnsRequest{SourceIP: srcIP, RequestName: request, Callback: *cb}
+	dnsReq := DnsRequest{SourceIP: srcIP, RequestName: request, QueryType: queryType, Callback: *cb}
 
 	result := dbHandle.Create(&dnsReq)
 
@@ -67,7 +67,7 @@ func AddDnsRequest(cbName string, request string, srcIP string) {
 // these should be base64 encoded before coming into this function
 func AddHttpRequest(cbName string, uri string, host string, method string, headers string, body string, srcIP string) {
 	if dbHandle == nil {
-		log.Panicf("dbHandle is nil!")
+		log.Panicln("dbHandle is nil!")
 	}
 
 	// get the associated callback record
