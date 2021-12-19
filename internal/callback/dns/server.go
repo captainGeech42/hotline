@@ -26,6 +26,9 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 	reqDomain := r.Question[0].Name
 	qtype := qtypeMapping[r.Question[0].Qtype]
 
+	srcIP := strings.Split(w.RemoteAddr().String(), ":")[0]
+	log.Printf("got a DNS %s request from %v for %s\n", qtype, srcIP, reqDomain)
+
 	// parse out the callback name
 	// identify how many labels are in the top-level callback domain
 	numLabels := strings.Count(callbackDomain, ".")
@@ -33,12 +36,16 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 	reqParts := strings.Split(reqDomain, ".")
 	// get the callback name
 	numParts := len(reqParts)
-	cbName := reqParts[numParts-numLabels-3]
+	idx := numParts - numLabels - 3
+	if idx >= 0 {
+		// get the callback name
+		cbName := reqParts[idx]
 
-	// log the request
-	srcIP := strings.Split(w.RemoteAddr().String(), ":")[0]
-	log.Printf("got a DNS %s request from %v for %s\n", qtype, srcIP, reqDomain)
-	db.AddDnsRequest(cbName, reqDomain, qtype, srcIP)
+		// log the request to the db
+		db.AddDnsRequest(cbName, reqDomain, qtype, srcIP)
+	} else {
+		log.Println("couldn't parse the callback name out of the DNS request")
+	}
 
 	// generate the response answer
 	switch r.Question[0].Qtype {

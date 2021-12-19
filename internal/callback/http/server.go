@@ -36,7 +36,16 @@ func writeReqToDb(next http.Handler) http.Handler {
 		httpHostParts := strings.Split(httpHost, ".")
 		// get the callback name
 		numParts := len(httpHostParts)
-		cbName := httpHostParts[numParts-numLabels-1]
+		idx := numParts - numLabels - 1
+		if idx < 0 {
+			// not enough parts in the domain, probably wasn't using a subdomain
+			// bail out
+			log.Printf("couldn't parse callback domain from %s\n", httpHost)
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		cbName := httpHostParts[idx]
 
 		// build the base64 header block
 		// headers are a map of strings -> slice of strings
