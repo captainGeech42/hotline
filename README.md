@@ -3,7 +3,7 @@ DNS/HTTP request logging app
 
 ![Dank meme](/meme.jpg)
 
-## Config:
+## Config
 
 For a client, you can omit the `server` block. The below sample config shows all possible values. Please note that the default Dockerfile only exposes port 8080/tcp and 53/[tcp,udp].
 
@@ -22,11 +22,19 @@ server:
   app:
     port: 8080
   db:
-    host: "localhost"
+    host: "db"
     port: 3306
     username: "dbuser"
     password: "put_a_secure_pass_here"
     dbname: "hotline"
 client:
   server_url: "http://otherdomain.abc"
+```
+
+## Testing
+
+To spin up a database without using the `docker-compose.yml` (note that this doesn't use the persistent DB data volume):
+
+```
+$ docker run --rm -d -p 3306:3306 --env-file .env mariadb:10.7
 ```

@@ -30,36 +30,44 @@ func newCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// parse json into struct
-	var cbReq newCallbackRequest
-	err = json.Unmarshal(body, &cbReq)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(500)
-		return
-	}
-
 	var cbResp newCallbackResponse
 	cbResp.Error = false
 
-	// check if cb exists
-	cb := db.GetCallback(cbReq.Name)
-	if cb == nil {
-		// cb doesn't exist, generate a new one
-		cbName := generateCallbackName()
-		cb = db.CreateCallback(cbName)
+	log.Println(len(body))
 
-		if cb == nil {
-			cbResp.Error = true
-			cbResp.Message = "failed to create callback"
-		} else {
-			cbResp.Message = "new callback created"
-			cbResp.Name = cb.Name
+	if len(body) > 0 {
+		// there was a json body, parse out the name
+		var cbReq newCallbackRequest
+		err = json.Unmarshal(body, &cbReq)
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(500)
+			return
 		}
+
+		// check if that name exists
+		if cb := db.GetCallback(cbReq.Name); cb != nil {
+			// name exists, send it back to the client
+			cbResp.Message = "using existing callback"
+			cbResp.Name = cbReq.Name
+			sendResponse(w, cbResp)
+
+			return
+		}
+	}
+
+	// cb doesn't exist, generate a new one
+	// intentionally not using the requested name,
+	// using a high entropy name instead
+	cbName := generateCallbackName()
+	cb := db.CreateCallback(cbName)
+
+	if cb == nil {
+		cbResp.Error = true
+		cbResp.Message = "failed to create callback"
 	} else {
-		// cb already exists, use that one
-		cbResp.Message = "using existing callback"
-		cbResp.Name = cbReq.Name
+		cbResp.Message = "new callback created"
+		cbResp.Name = cb.Name
 	}
 
 	// send response
