@@ -1,0 +1,65 @@
+---
+# The server block is used when running `hotline server`
+# If you are configuring the CLI client, you can omit this section
+server:
+  # config items for the DNS or HTTP callbacks
+  callback:
+    # the top-level domain used when generating callback domains
+    domain: "mydomain.xyz"
+
+    # config items for the HTTP callback server
+    http:
+      # port that should be used
+      # note that the provided value (8080) is used in the provided docker setup
+      port: 8080
+
+      # what text should be in the http response
+      # this is wrapped in json:
+      # {"message": "your text here"}
+      default_response: "research by @captainGeech42 using hotline"
+    dns:
+      # UDP port that should be used
+      # note that the provided value (53) is used in the provided docker setup
+      # i would strongly recommend *against* changing this
+      port: 53
+
+      # what IP address should be returned for an A record request
+      # if you want HTTP callbacks to work, this needs to be the
+      # public IP for the hotline HTTP callback server
+      default_A_response: 1.2.3.4 
+
+      # what should be returned for a TXT request
+      default_TXT_response: "research by @captainGeech42 using hotline"
+
+      # other types of DNS requests still get logged, but don't have a custom response returned
+  
+  # config items for the front-end web app and the backing API
+  app:
+    # port that should be used
+    # note that the provided value (8080) is used in the provided docker setup
+    port: 8080
+
+  # config items for connecting to the mariadb database
+  db:
+    # host/IP for the database
+    # if you use the provided docker setup, the provided value ("db")
+    # will resolve to the mariadb container
+    host: "db" 
+
+    # port for the database
+    # port used in the provided docker setup is 3306
+    port: 3306
+
+    # credentials for the database
+    # these should be mirrored to .env if using the provided docker setup
+    username: "dbuser"
+    password: "put_a_secure_pass_here"
+
+    # name of the database to use
+    # this should also be mirrored to .env if using the provided docker setup
+    dbname: "hotline"
+
+# These are the only configuration items required for the CLI client, via `hotline client`
+client:
+  # the full URL for the hotline server
+  server_url: "http://otherdomain.abc"

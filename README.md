@@ -3,33 +3,20 @@ DNS/HTTP request logging app
 
 ![Dank meme](/meme.jpg)
 
-## Config
+## Setup Instructions
 
-For a client, you can omit the `server` block. The below sample config shows all possible values. Please note that the default Dockerfile only exposes port 8080/tcp and 53/[tcp,udp].
+### DNS Setup
 
-```yml
----
-server:
-  callback:
-    domain: "mydomain.xyz"
-    http:
-      port: 8080
-      default_response: "research by @captainGeech42 using hotline"
-    dns:
-      port: 53
-      default_A_response: 1.2.3.4 # this needs to be the public IP for the hotline HTTP callback server
-      default_TXT_response: "research by @captainGeech42 using hotline"
-  app:
-    port: 8080
-  db:
-    host: "db"
-    port: 3306
-    username: "dbuser"
-    password: "put_a_secure_pass_here"
-    dbname: "hotline"
-client:
-  server_url: "http://otherdomain.abc"
-```
+tbd
+
+### Server Setup
+
+1. Install Docker + Docker Compose
+2. Copy `.env_sample` to `.env` and edit accordingly
+3. Copy `hotline_sample.yml` to `hotline.yml` and edit accordingly
+4. Copy `nginx/nginx_example.conf` to `nginx/nginx.conf` and edit accordingly
+4. `docker compose build`
+5. `docker compose run`
 
 ## Testing
 
