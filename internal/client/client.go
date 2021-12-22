@@ -68,7 +68,7 @@ func StartClient(prefCbname string, showHistorical bool, cfg *config.Config) {
 		log.Printf("Hotline is now active using your new callback: %s\n", cbName)
 	}
 
-	log.Printf("Start making requests!\n\n\t\t$ curl http://%[1]s/test\n\n\t\t$ dig +short TXT %[1]s\n", cbDomain)
+	log.Printf("Start making requests!\n\n\t\t$ curl http://%[1]s/test\n\n\t\t$ dig +short TXT %[1]s\n\n", cbDomain)
 
 	for {
 		since := time.Now()
