@@ -22,7 +22,7 @@ jobs:
     - name: Build
       run: |
         go mod download
-        pushd internal/app/frontend/spa
+        pushd internal/web/frontend/spa
         npm i
         npm run build
         popd
