@@ -11,5 +11,7 @@ type NewCallbackRequest struct {
 
 type NewCallbackResponse struct {
 	Response
-	Name string `json:"name"`
+	Name         string `json:"name"`
+	UsedExisting bool   `json:"used_existing"`
+	FullCbDomain string `json:"full_domain"`
 }

@@ -33,7 +33,7 @@ func StartApp(cfg *config.Config) {
 	frontendRouter := router.PathPrefix("/").Subrouter()
 
 	// configure their specific routes/middlware
-	backend.ConfigureRouter(backendRouter)
+	backend.ConfigureRouter(backendRouter, cfg)
 	frontend.ConfigureRouter(frontendRouter)
 
 	// connect to database

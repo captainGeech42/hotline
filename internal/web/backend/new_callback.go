@@ -2,6 +2,7 @@ package backend
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -10,7 +11,7 @@ import (
 	"github.com/captainGeech42/hotline/internal/web/schema"
 )
 
-// POST /api/v1/callback
+// POST /api/callback
 // create the callback if it doesn't exist
 // otherwise, confirm that it exists and send back to client
 func newCallback(w http.ResponseWriter, r *http.Request) {
@@ -24,6 +25,7 @@ func newCallback(w http.ResponseWriter, r *http.Request) {
 
 	var cbResp schema.NewCallbackResponse
 	cbResp.Error = false
+	cbResp.UsedExisting = false
 
 	if len(body) > 0 {
 		// there was a json body, parse out the name
@@ -40,6 +42,7 @@ func newCallback(w http.ResponseWriter, r *http.Request) {
 			// name exists, send it back to the client
 			cbResp.Message = "using existing callback"
 			cbResp.Name = cbReq.Name
+			cbResp.UsedExisting = true
 			sendResponse(w, cbResp)
 
 			return
@@ -59,6 +62,8 @@ func newCallback(w http.ResponseWriter, r *http.Request) {
 		cbResp.Message = "new callback created"
 		cbResp.Name = cb.Name
 	}
+
+	cbResp.FullCbDomain = fmt.Sprintf("%s.%s", cbResp.Name, callbackDomain)
 
 	// send response
 	sendResponse(w, cbResp)
