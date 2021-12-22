@@ -1,4 +1,4 @@
-package app
+package web
 
 import (
 	"fmt"
@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/captainGeech42/hotline/internal/app/backend"
-	"github.com/captainGeech42/hotline/internal/app/frontend"
 	"github.com/captainGeech42/hotline/internal/config"
 	"github.com/captainGeech42/hotline/internal/db"
+	"github.com/captainGeech42/hotline/internal/web/backend"
+	"github.com/captainGeech42/hotline/internal/web/frontend"
 	"github.com/gorilla/mux"
 )
 
@@ -42,7 +42,7 @@ func StartApp(cfg *config.Config) {
 	}
 
 	// start the http listener
-	addr := fmt.Sprintf("0.0.0.0:%d", cfg.Server.App.Port)
+	addr := fmt.Sprintf("0.0.0.0:%d", cfg.Server.Web.Port)
 	log.Printf("listening on %s\n", addr)
 	log.Fatal(http.ListenAndServe(addr, router))
 }

@@ -34,7 +34,7 @@ server:
       # other types of DNS requests still get logged, but don't have a custom response returned
   
   # config items for the front-end web app and the backing API
-  app:
+  web:
     # port that should be used
     # note that the provided value (8080) is used in the provided docker setup
     port: 8080

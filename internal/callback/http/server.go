@@ -96,7 +96,7 @@ func StartServer(cfg *config.Config) {
 	callbackDomain = cfg.Server.Callback.Domain
 
 	// start the http listener
-	addr := fmt.Sprintf("0.0.0.0:%d", cfg.Server.App.Port)
+	addr := fmt.Sprintf("0.0.0.0:%d", cfg.Server.Callback.Http.Port)
 	log.Printf("listening on %s\n", addr)
 	log.Fatal(http.ListenAndServe(addr, router))
 }

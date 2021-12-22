@@ -12,7 +12,7 @@ COPY . .
 RUN go get -d -v
 
 # build spa
-WORKDIR $GOPATH/src/hotline/internal/app/frontend/spa
+WORKDIR $GOPATH/src/hotline/internal/web/frontend/spa
 RUN npm i
 RUN npm run build
 

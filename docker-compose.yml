@@ -25,11 +25,11 @@ services:
       - app
       - http-cb
 
-  app:
+  web:
     build: .
     environment:
       HOTLINE_CONFIG_PATH: /hotline.yml
-      HOTLINE_APP: app
+      HOTLINE_APP: web
     volumes:
       - ./hotline.yml:/hotline.yml:ro
     depends_on:
@@ -52,7 +52,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      app:
+      web:
         condition: service_healthy
 
   dns-cb:
@@ -68,7 +68,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      app:
+      web:
         condition: service_healthy
 
 volumes:

@@ -17,7 +17,7 @@ type Callback struct {
 	Dns    Dns    `yaml:"dns"`
 }
 
-type App struct {
+type Web struct {
 	Port int `yaml:"port"`
 }
 
@@ -31,7 +31,7 @@ type Database struct {
 
 type Server struct {
 	Callback Callback `yaml:"callback"`
-	App      App      `yaml:"app"`
+	Web      Web      `yaml:"web"`
 	Database Database `yaml:"db"`
 }
 
