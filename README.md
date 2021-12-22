@@ -28,6 +28,15 @@ This enables users of your Hotline server to access it through public DNS server
 4. `docker compose build`
 5. `docker compose run`
 
+If you already have something running on port 53, you'll need to stop that service. A common example of this is `systemd-resolved`. To permanently stop `systemd-resolved`, do the following:
+
+```
+$ sudo systemctl stop systemd-resolved
+$ sudo systemctl disable systemd-resolved
+$ sudo mv /etc/resolv.conf /etc/resolv.conf.bak
+$ echo -e "nameserver 8.8.8.8\nnameserver 8.8.4.4" | sudo tee /etc/resolv.conf
+```
+
 ## Testing
 
 To spin up a database without using the `docker-compose.yml` (note that this doesn't use the persistent DB data volume):
