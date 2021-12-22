@@ -5,7 +5,7 @@ server:
   # config items for the DNS or HTTP callbacks
   callback:
     # the top-level domain used when generating callback domains
-    domain: "mydomain.xyz"
+    domain: "hotlinecallback.net"
 
     # config items for the HTTP callback server
     http:
@@ -62,4 +62,4 @@ server:
 # These are the only configuration items required for the CLI client, via `hotline client`
 client:
   # the full URL for the hotline server
-  server_url: "http://otherdomain.abc"
+  server_url: "http://hotlinewebapp.xyz"

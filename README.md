@@ -5,9 +5,19 @@ DNS/HTTP request logging app
 
 ## Setup Instructions
 
+Hotline is designed to be deployable on a single system with one public IP address, but is granular enough to be deployed across multiple systems/IP addresses. For multiple systems though, you'll need to modify the provided Docker/Docker Compose setup.
+
 ### DNS Setup
 
-tbd
+Hotline can use one or two different domains (if you use one domain, you'll want to configure a subdomain or two).
+
+In this example, we'll use `hotlinewebapp.xyz` as the front-end web app domain, and `hotlinecallback.net` for the callback domain.
+
+1. Configure an A record for `hotlinewebapp.xyz` to point to your Hotline server
+2. Configure a NS record for `hotlinecallback.net` that points to `hotlinewebapp.xyz.`
+3. Configure a wildcard A record for `*.hotlinecallback.net` that points to your Hotline server
+
+This enables users of your Hotline server to access it through public DNS servers, but DNS callbacks generated for your Hotline server to properly resolve back to your Hotline DNS callback server.
 
 ### Server Setup
 
