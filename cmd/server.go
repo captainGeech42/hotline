@@ -19,8 +19,8 @@ var ServerCommand = &cobra.Command{
 	Use:   "server",
 	Short: "Run the hotline server (set $HOTLINE_APP to configure which server to run)",
 	Run: func(cmd *cobra.Command, args []string) {
-		config := config.LoadConfig(configPath)
-		if config == nil {
+		cfg := config.LoadConfig(configPath)
+		if cfg == nil {
 			return
 		}
 
@@ -30,15 +30,15 @@ var ServerCommand = &cobra.Command{
 		case "dns":
 			log.Println("starting dns callback server")
 
-			dns.StartServer(config)
+			dns.StartServer(cfg)
 		case "http":
 			log.Println("starting http callback server")
 
-			http.StartServer(config)
+			http.StartServer(cfg)
 		case "web":
 			log.Println("starting web server")
 
-			web.StartApp(config)
+			web.StartApp(cfg)
 		default:
 			log.Fatalln("failed to launch server: you must set $HOTLINE_APP to dns, http, or web")
 		}
