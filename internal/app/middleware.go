@@ -10,7 +10,7 @@ import (
 func loggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// don't log healthcheck b/c i don't care
-		if r.RequestURI == "/healtcheck" {
+		if r.RequestURI == "/healthcheck" {
 			return
 		}
 
