@@ -7,16 +7,8 @@ import (
 	"net/http"
 
 	"github.com/captainGeech42/hotline/internal/db"
+	"github.com/captainGeech42/hotline/internal/web/schema"
 )
-
-type newCallbackRequest struct {
-	Name string `json:"name"`
-}
-
-type newCallbackResponse struct {
-	response
-	Name string `json:"name"`
-}
 
 // POST /api/v1/callback
 // create the callback if it doesn't exist
@@ -30,14 +22,12 @@ func newCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var cbResp newCallbackResponse
+	var cbResp schema.NewCallbackResponse
 	cbResp.Error = false
-
-	log.Println(len(body))
 
 	if len(body) > 0 {
 		// there was a json body, parse out the name
-		var cbReq newCallbackRequest
+		var cbReq schema.NewCallbackRequest
 		err = json.Unmarshal(body, &cbReq)
 		if err != nil {
 			log.Println(err)
