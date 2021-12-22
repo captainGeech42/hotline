@@ -36,6 +36,7 @@ func makeReq(urlFromCfg string, uri string, method string, body interface{}) ([]
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Add("User-Agent", "Hotline-client")
 
 	resp, err := client.Do(req)
 	if err != nil {
