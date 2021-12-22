@@ -14,7 +14,12 @@ func loggingMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		log.Printf("request from %s to %s\n", r.RemoteAddr, r.RequestURI)
+		// nginx setup sets the X-Hotline-Ip header to show the real IP without
+		// colliding with a another X-Proxy header. if that is set, we don't
+		// need to worry about logging requests
+		if _, exists := r.Header["X-Hotline-Real-Ip"]; !exists {
+			log.Printf("request from %s to %s\n", r.RemoteAddr, r.RequestURI)
+		}
 
 		next.ServeHTTP(w, r)
 	})
