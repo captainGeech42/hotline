@@ -9,7 +9,10 @@ import (
 var callbackDomain string
 
 func ConfigureRouter(router *mux.Router, cfg *config.Config) {
+	// add routes
 	router.HandleFunc("/callback", newCallback).Methods("POST")
+	router.HandleFunc("/callback/requests", getCbRequests).Methods("GET")
 
+	// set globals
 	callbackDomain = cfg.Server.Callback.Domain
 }

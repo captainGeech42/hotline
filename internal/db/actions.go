@@ -2,6 +2,7 @@ package db
 
 import (
 	"log"
+	"time"
 )
 
 func GetCallback(cbName string) *Callback {
@@ -41,7 +42,7 @@ func CreateCallback(cbName string) *Callback {
 	return &cb
 }
 
-func AddDnsRequest(cbName string, request string, queryType string, srcIP string) {
+func AddDnsRequest(cbName string, queryName string, queryType string, srcIP string) {
 	if dbHandle == nil {
 		log.Panicln("dbHandle is nil!")
 	}
@@ -53,7 +54,7 @@ func AddDnsRequest(cbName string, request string, queryType string, srcIP string
 		return
 	}
 
-	dnsReq := DnsRequest{SourceIP: srcIP, RequestName: request, QueryType: queryType, Callback: *cb}
+	dnsReq := DnsRequest{SourceIP: srcIP, QueryName: queryName, QueryType: queryType, Callback: *cb}
 
 	result := dbHandle.Create(&dnsReq)
 
@@ -86,4 +87,38 @@ func AddHttpRequest(cbName string, uri string, host string, method string, heade
 	} else {
 		log.Printf("added HTTP request from %s for %s to database\n", srcIP, cbName)
 	}
+}
+
+func GetHttpRequests(cbName string, since *time.Time) []HttpRequest {
+	var httpReqs []HttpRequest
+
+	// cb := GetCallback(cbName)
+
+	query := dbHandle.Joins("Callback", dbHandle.Where(&Callback{Name: cbName}))
+	if since != nil {
+		query = query.Where("`http_requests`.`created_at` >= ?", since)
+	}
+
+	results := query.Find(&httpReqs)
+	if results.Error != nil {
+		log.Println(results.Error)
+	}
+
+	return httpReqs
+}
+
+func GetDnsRequests(cbName string, since *time.Time) []DnsRequest {
+	var dnsReqs []DnsRequest
+
+	query := dbHandle.Joins("Callback", dbHandle.Where(&Callback{Name: cbName}))
+	if since != nil {
+		query = query.Where("`dns_requests`.`created_at` >= ?", since)
+	}
+
+	results := query.Find(&dnsReqs)
+	if results.Error != nil {
+		log.Println(results.Error)
+	}
+
+	return dnsReqs
 }
