@@ -1,4 +1,7 @@
 # Hotline
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/captainGeech42/hotline)](https://goreportcard.com/report/github.com/captainGeech42/hotline) [![Build Image](https://github.com/captainGeech42/hotline/workflows/Build/badge.svg)](https://github.com/captainGeech42/hotline/actions?query=workflow%3A%22Build%22) [![Docker Hub Publish](https://github.com/captainGeech42/hotline/workflows/Docker%20Hub%20Publish/badge.svg)](https://github.com/captainGeech42/hotline/actions?query=workflow%3A%22Docker+Hub+Publish%22) [![Docker Hub Image](https://img.shields.io/docker/v/captaingeech/hotline?color=blue)](https://hub.docker.com/repository/docker/captaingeech/hotline/general)
+
 DNS/HTTP request logging app
 
 ![Dank meme](/meme.jpg)
