@@ -40,7 +40,7 @@ server:
       # challenges to be served, you can set this to ""
       # for additional info, see the docs on SSL configuration
       # TODO: make those docs
-      acme_challenge_path: "/acme_response"
+      acme_challenge_path: "/acme/response"
   
   # config items for the front-end web app and the backing API
   web:

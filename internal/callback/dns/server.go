@@ -4,8 +4,10 @@ package dns
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net"
+	"os"
 	"strings"
 
 	"github.com/captainGeech42/hotline/internal/config"
@@ -16,6 +18,7 @@ import (
 var callbackDomain string
 var defaultAResponse net.IP
 var defaultTXTResponse []string
+var acmeChallengePath string
 
 type dnsHandler struct{}
 
@@ -31,6 +34,35 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 
 	srcIP := strings.Split(w.RemoteAddr().String(), ":")[0]
 	log.Printf("got a DNS %s request from %v for %s\n", qtype, srcIP, reqDomain)
+
+	// check if we are handling ACME responses
+	if reqDomain == "_acme-challenge."+callbackDomain+"." && acmeChallengePath != "" {
+		// open the acme challenge response file
+		file, err := os.Open(acmeChallengePath)
+		if err != nil {
+			log.Println("error opening the acme challenge response file")
+			log.Println(err)
+			return
+		}
+		defer file.Close()
+
+		// read in the file
+		responseBytes, err := io.ReadAll(file)
+		if err != nil {
+			log.Println("error reading the acme challenge response file")
+			log.Println(err)
+			return
+		}
+
+		// set the TXT response
+		log.Println("returning the ACME challenge response from disk")
+		msg.Answer = append(msg.Answer, &dns.TXT{
+			Hdr: dns.RR_Header{Name: msg.Question[0].Name, Rrtype: dns.TypeTXT, Class: dns.ClassINET, Ttl: 60},
+			Txt: []string{string(responseBytes)},
+		})
+
+		return
+	}
 
 	// make sure the domain being queried is the callback domain
 	if !strings.HasSuffix(reqDomain, callbackDomain+".") {
@@ -89,6 +121,7 @@ func StartServer(cfg *config.Config) {
 	callbackDomain = cfg.Server.Callback.Domain
 	defaultAResponse = net.ParseIP(cfg.Server.Callback.Dns.DefaultAResponse)
 	defaultTXTResponse = []string{cfg.Server.Callback.Dns.DefaultTXTResponse}
+	acmeChallengePath = cfg.Server.Callback.Dns.AcmeChallengePath
 
 	// start the server
 	log.Printf("starting dns callback listener on %s\n", addr)
