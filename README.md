@@ -28,7 +28,7 @@ This enables users of your Hotline server to access it through public DNS server
 3. Copy `hotline_sample.yml` to `hotline.yml` and edit accordingly
 4. Copy `nginx/nginx_sample.conf` to `nginx/nginx.conf` and edit accordingly
 4. `docker-compose build`
-5. `docker-compose run`
+5. `docker-compose up`
 
 If you already have something running on port 53, you'll need to stop that service. A common example of this is `systemd-resolved`. To permanently stop `systemd-resolved`, do the following:
 
