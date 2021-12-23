@@ -36,10 +36,83 @@ $ sudo mv /etc/resolv.conf /etc/resolv.conf.bak
 $ echo -e "nameserver 8.8.8.8\nnameserver 8.8.4.4" | sudo tee /etc/resolv.conf
 ```
 
-## Testing
+### Client Setup
 
-To spin up a database without using the `docker-compose.yml` (note that this doesn't use the persistent DB data volume):
+Now that you have a Hotline server running, you can setup a client. First, install Hotline:
 
 ```
-$ docker run --rm -d -p 3306:3306 --env-file .env mariadb:10.7
+$ go install github.com/captainGeech42/hotline
 ```
+
+Then, setup your config in `~/.hotline.yml`:
+
+```yml
+---
+client:
+  server_url: "http://hotlinewebapp.xyz"
+```
+
+Now you are ready to start using Hotline!
+
+```
+$ hotline client
+2021/12/23 08:27:57 Hotline is now active using your new callback: 9g7yx03b2nvy5hpnpo48
+2021/12/23 08:27:57 Start making requests!
+
+        $ curl http://9g7yx03b2nvy5hpnpo48.hotlinecallback.net
+
+        $ dig +short TXT 9g7yx03b2nvy5hpnpo48.hotlinecallback.net
+
+===========================================================================
+
+```
+
+## Usage
+
+### Client Usage
+
+```
+$ hotline client -h
+Run the hotline client
+
+Usage:
+  hotline client [flags]
+
+Flags:
+  -h, --help              help for client
+  -n, --name string       Existing callback name to use (leave blank to generate a new one)
+  -a, --show-historical   Show all previous requests
+
+Global Flags:
+  -c, --config string   Path to config file (ignored if $HOTLINE_CONFIG_PATH is set) (default "$HOME/.hotline.yml")
+```
+
+If you run `hotline client` without any arguments, a new callback will be generated, and any requests to your callback (DNS or HTTP) will be streamed to your client.
+
+If you specify the name of an existing callback with `-n`/`--name`, it will be used instead of a randomly generated one. However, if that callback doesn't exist, a new, randomly generated one will be used, rather than the one you specified being created and used.
+
+If you use an existing callback and want to see all of the previous requests, set the `-a`/`--show-historical` flag.
+
+### Server Usage
+
+```
+$ hotline server -h
+Run the hotline server (set $HOTLINE_APP to configure which server to run)
+
+Usage:
+  hotline server [flags]
+
+Flags:
+  -h, --help   help for server
+
+Global Flags:
+  -c, --config string   Path to config file (ignored if $HOTLINE_CONFIG_PATH is set) (default "$HOME/.hotline.yml")
+```
+
+The main configuration item for running a server (besides the `hotline.yml` file) is setting the `$HOTLINE_APP` environment variable to one of the following options:
+
+* `web`: To run the API backend and serve the React SPA frontend
+* `http`: To run the HTTP callback service
+* `dns`: To run the DNS callback service
+
+The official Hotline Docker image doesn't set this variable, so you'll need to set it when running a Hotline server. The provided `docker-compose.yml` configures this for each container ([example](https://github.com/captainGeech42/hotline/blob/main/docker-compose.yml#L30)).

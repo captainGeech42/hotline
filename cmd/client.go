@@ -13,7 +13,7 @@ var (
 
 func init() {
 	ClientCommand.Flags().StringVarP(&CallbackName, "name", "n", "", "Existing callback name to use (leave blank to generate a new one)")
-	ClientCommand.Flags().BoolVarP(&ShowHistorical, "show-historical", "a", false, "Show all previous callbacks")
+	ClientCommand.Flags().BoolVarP(&ShowHistorical, "show-historical", "a", false, "Show all previous requests")
 	rootCmd.AddCommand(ClientCommand)
 }
 
