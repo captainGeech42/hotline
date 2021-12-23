@@ -23,11 +23,20 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 	msg := dns.Msg{}
 	msg.SetReply(r)
 
+	// send the response at the end
+	defer w.WriteMsg(&msg)
+
 	reqDomain := r.Question[0].Name
 	qtype := qtypeMapping[r.Question[0].Qtype]
 
 	srcIP := strings.Split(w.RemoteAddr().String(), ":")[0]
 	log.Printf("got a DNS %s request from %v for %s\n", qtype, srcIP, reqDomain)
+
+	// make sure the domain being queried is the callback domain
+	if !strings.HasSuffix(reqDomain, callbackDomain+".") {
+		log.Println("DNS request wasn't for a callback domain")
+		return
+	}
 
 	// parse out the callback name
 	// identify how many labels are in the top-level callback domain
@@ -45,6 +54,7 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 		db.AddDnsRequest(cbName, reqDomain, qtype, srcIP)
 	} else {
 		log.Println("couldn't parse the callback name out of the DNS request")
+		return
 	}
 
 	// generate the response answer
@@ -62,8 +72,6 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 	default:
 		log.Printf("got an unsupported query type request, not sending a response: %v\n", qtype)
 	}
-
-	w.WriteMsg(&msg)
 }
 
 func StartServer(cfg *config.Config) {

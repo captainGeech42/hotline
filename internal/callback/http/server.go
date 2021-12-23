@@ -33,6 +33,12 @@ func writeReqToDb(next http.Handler) http.Handler {
 		numLabels := strings.Count(callbackDomain, ".") + 1
 		// split the http host used in the request
 		httpHost := strings.Split(r.Host, ":")[0] // used later too
+		// make sure this is for a callback domain
+		if !strings.HasSuffix(httpHost, callbackDomain) {
+			log.Println("HTTP request wasn't for a callback domain")
+			next.ServeHTTP(w, r)
+			return
+		}
 		httpHostParts := strings.Split(httpHost, ".")
 		// get the callback name
 		numParts := len(httpHostParts)
