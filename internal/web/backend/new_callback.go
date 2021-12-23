@@ -43,6 +43,7 @@ func newCallback(w http.ResponseWriter, r *http.Request) {
 			cbResp.Message = "using existing callback"
 			cbResp.Name = cbReq.Name
 			cbResp.UsedExisting = true
+			cbResp.FullCbDomain = fmt.Sprintf("%s.%s", cbResp.Name, callbackDomain)
 			sendResponse(w, cbResp)
 
 			return
