@@ -76,7 +76,7 @@ $ hotline client
 
 ```
 $ hotline client -h
-Run the hotline client
+Run the Hotline client
 
 Usage:
   hotline client [flags]
@@ -100,7 +100,7 @@ If you use an existing callback and want to see all of the previous requests, se
 
 ```
 $ hotline server -h
-Run the hotline server (set $HOTLINE_APP to configure which server to run)
+Run the Hotline server (set $HOTLINE_APP to configure which server to run)
 
 Usage:
   hotline server [flags]

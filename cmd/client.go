@@ -19,7 +19,7 @@ func init() {
 
 var ClientCommand = &cobra.Command{
 	Use:   "client",
-	Short: "Run the hotline client",
+	Short: "Run the Hotline client",
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg := config.LoadConfig(configPath)
 		if cfg == nil {

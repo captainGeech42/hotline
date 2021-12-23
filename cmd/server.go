@@ -17,7 +17,7 @@ func init() {
 
 var ServerCommand = &cobra.Command{
 	Use:   "server",
-	Short: "Run the hotline server (set $HOTLINE_APP to configure which server to run)",
+	Short: "Run the Hotline server (set $HOTLINE_APP to configure which server to run)",
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg := config.LoadConfig(configPath)
 		if cfg == nil {
