@@ -91,7 +91,6 @@ func wrapStringOnWord(text string, lineWidth int) string {
 	}
 
 	return wrapped
-
 }
 
 // pretty print a HTTP request
@@ -106,7 +105,6 @@ func printHttpRequest(req schema.CbHttpRequest) {
 
 	headerStr := string(headerBytes)
 	headerStr = strings.ReplaceAll(headerStr, "\n", "\n                        ")
-	// headerStr = strings.TrimSuffix(headerStr, "\n")
 
 	bodyBytes, err := base64.StdEncoding.DecodeString(req.Body)
 	if err != nil {
@@ -147,12 +145,10 @@ func StartClient(prefCbname string, showHistorical bool, cfg *config.Config) {
 		httpReqs, dnsReqs := getRequests(cbName, since, cfg)
 
 		for _, req := range *dnsReqs {
-			//log.Printf("DNS Request: %s request for %s from %s\n", req.QueryType, req.QueryName, req.SourceIP)
 			printDnsRequest(req)
 		}
 
 		for _, req := range *httpReqs {
-			//log.Printf("HTTP Request: %s request for %s from %s\n", req.Method, req.URI, req.SourceIP)
 			printHttpRequest(req)
 		}
 	}

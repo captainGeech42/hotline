@@ -26,7 +26,7 @@ This enables users of your Hotline server to access it through public DNS server
 1. Install Docker + Docker Compose
 2. Copy `.env_sample` to `.env` and edit accordingly
 3. Copy `hotline_sample.yml` to `hotline.yml` and edit accordingly
-4. Copy `nginx/nginx_example.conf` to `nginx/nginx.conf` and edit accordingly
+4. Copy `nginx/nginx_sample.conf` to `nginx/nginx.conf` and edit accordingly
 4. `docker-compose build`
 5. `docker-compose run`
 
