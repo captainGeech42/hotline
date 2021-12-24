@@ -2,6 +2,7 @@ package dns
 
 import (
 	"errors"
+	"log"
 	"os"
 	"path"
 	"strings"
@@ -12,6 +13,7 @@ import (
 // the first label may not be _acme-challenge though
 // on disk, they are stored in $acmedir/$callbackdomain/$record,
 // which is a file with the contents to return.
+// example: /acme/response/hotlinecallback.net/_acme-response
 // this function checks if such a response exists
 func doesAcmeChalRespExist(domain string) bool {
 	// check if an acme response directory has been configured
@@ -34,6 +36,10 @@ func getPathForAcmeChallenge(domain string) string {
 	// this could leave multiple labels still in the prefix,
 	// but that doesn't matter for the usage of this
 	prefix := strings.TrimSuffix(domain, callbackDomain+".")
+	log.Printf("domain=%s, callbackDomain=%s, prefix=%s\n", domain, callbackDomain, prefix)
 
-	return path.Join(acmeChallengePath, callbackDomain, prefix)
+	p := path.Join(acmeChallengePath, callbackDomain, prefix)
+	log.Printf("path=%s\n", p)
+
+	return p
 }

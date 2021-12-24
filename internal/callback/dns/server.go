@@ -29,6 +29,9 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 	// send the response at the end
 	defer w.WriteMsg(&msg)
 
+	// according to the RFC, DNS is supposed to be case insensitive
+	// TODO: think about this more, maybe should be user controllable?
+	// acme stuff is wonky casing, that part at least needs to be lowercased
 	reqDomain := strings.ToLower(r.Question[0].Name)
 	qtype := qtypeMapping[r.Question[0].Qtype]
 
@@ -37,11 +40,13 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 
 	// check if we are handling ACME responses
 	if doesAcmeChalRespExist(reqDomain) {
+		log.Println("handling ACME challenge response")
+
 		// open the acme challenge response file
 		chalRespPath := getPathForAcmeChallenge(reqDomain)
 		file, err := os.Open(chalRespPath)
 		if err != nil {
-			log.Println("error opening the acme challenge response file")
+			log.Println("error opening the ACME challenge response file")
 			log.Println(err)
 			return
 		}
@@ -50,7 +55,7 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 		// read in the file
 		responseBytes, err := io.ReadAll(file)
 		if err != nil {
-			log.Println("error reading the acme challenge response file")
+			log.Println("error reading the ACME challenge response file")
 			log.Println(err)
 			return
 		}
