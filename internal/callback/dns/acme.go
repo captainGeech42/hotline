@@ -35,7 +35,7 @@ func getPathForAcmeChallenge(domain string) string {
 	// trim off the callback domain
 	// this could leave multiple labels still in the prefix,
 	// but that doesn't matter for the usage of this
-	prefix := strings.TrimSuffix(domain, callbackDomain+".")
+	prefix := strings.TrimSuffix(domain, "."+callbackDomain+".")
 	log.Printf("domain=%s, callbackDomain=%s, prefix=%s\n", domain, callbackDomain, prefix)
 
 	p := path.Join(acmeChallengePath, callbackDomain, prefix)
