@@ -29,7 +29,7 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 	// send the response at the end
 	defer w.WriteMsg(&msg)
 
-	reqDomain := r.Question[0].Name
+	reqDomain := strings.ToLower(r.Question[0].Name)
 	qtype := qtypeMapping[r.Question[0].Qtype]
 
 	srcIP := strings.Split(w.RemoteAddr().String(), ":")[0]

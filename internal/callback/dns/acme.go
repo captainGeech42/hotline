@@ -22,7 +22,7 @@ func doesAcmeChalRespExist(domain string) bool {
 	}
 
 	// get the path for the acme challenge response, if it exists
-	chalPath := getPathForAcmeChallenge(strings.ToLower(domain))
+	chalPath := getPathForAcmeChallenge(domain)
 
 	// check if the file exists
 	_, err := os.Stat(chalPath)
