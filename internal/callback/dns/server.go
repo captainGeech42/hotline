@@ -36,9 +36,10 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 	log.Printf("got a DNS %s request from %v for %s\n", qtype, srcIP, reqDomain)
 
 	// check if we are handling ACME responses
-	if reqDomain == "_acme-challenge."+callbackDomain+"." && acmeChallengePath != "" {
+	if doesAcmeChalRespExist(reqDomain) {
 		// open the acme challenge response file
-		file, err := os.Open(acmeChallengePath)
+		chalRespPath := getPathForAcmeChallenge(reqDomain)
+		file, err := os.Open(chalRespPath)
 		if err != nil {
 			log.Println("error opening the acme challenge response file")
 			log.Println(err)

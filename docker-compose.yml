@@ -15,7 +15,7 @@ services:
   proxy:
     image: "nginx:latest"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/proxy.conf:ro
+      - "./nginx/nginx.conf:/etc/nginx/conf.d/proxy.conf:ro"
     ports:
       - "80:80"
       - "443:443"
@@ -29,7 +29,7 @@ services:
       HOTLINE_CONFIG_PATH: /hotline.yml
       HOTLINE_APP: web
     volumes:
-      - ./hotline.yml:/hotline.yml:ro
+      - "./hotline.yml:/hotline.yml:ro"
     depends_on:
       db:
         condition: service_healthy
@@ -46,7 +46,7 @@ services:
       HOTLINE_CONFIG_PATH: /hotline.yml
       HOTLINE_APP: http
     volumes:
-      - ./hotline.yml:/hotline.yml:ro
+      - "./hotline.yml:/hotline.yml:ro"
     depends_on:
       db:
         condition: service_healthy
@@ -59,8 +59,8 @@ services:
       HOTLINE_CONFIG_PATH: /hotline.yml
       HOTLINE_APP: dns
     volumes:
-      - ./hotline.yml:/hotline.yml:ro
-      - ./ssl/dns_chal:/acme:ro
+      - "./hotline.yml:/hotline.yml:ro"
+      - "./ssl/dns_chal:/acme/response:ro"
     ports:
       - "53:53/tcp"
       - "53:53/udp"

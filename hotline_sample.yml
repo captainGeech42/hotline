@@ -35,7 +35,7 @@ server:
 
       # for an SSL cert to be issued for the callback domain, a custom TXT response
       # needs to be served to the ACME servers operated by Let's Encrypt
-      # the default value ("/acme_response") is used in the provided docker setup
+      # the default value ("/acme/response") is used in the provided docker setup
       # if you don't care about SSL and don't want a custom TXT response for ACME
       # challenges to be served, you can set this to ""
       # for additional info, see the docs on SSL configuration
