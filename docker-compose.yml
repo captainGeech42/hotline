@@ -17,6 +17,8 @@ services:
     volumes:
       - "./nginx/nginx.conf:/etc/nginx/conf.d/proxy.conf:ro"
       - "./ssl/callback_cert:/callback_cert:ro"
+      - "./ssl/app_cert:/app_cert:ro"
+      - "./ssl/http_chal:/acme-chal:ro"
     ports:
       - "80:80"
       - "443:443"
