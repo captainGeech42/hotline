@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ $# -ne 2 ]]; then
+if [[ $# -ne 1 ]]; then
     echo "usage: gen_cert.sh [callback domain]" 2>&1
     exit 2
 fi
