@@ -16,7 +16,7 @@ fi
 docker pull captaingeech/certbot-dns-hotline:latest
 
 # generate the certificates
-docker run --rm -it -v "$(pwd)/dns_chal:/acme-share" -v "$(pwd)/callback_cert:/etc/letsencrypt/live/$1" captaingeech/certbot-dns-hotline:latest certonly \
+docker run --rm -it -v "$(pwd)/dns_chal:/acme-share" -v "$(pwd)/letsencrypt:/etc/letsencrypt" captaingeech/certbot-dns-hotline:latest certonly \
     --authenticator dns-hotline \
     --dns-hotline-path /acme-share \
     --server https://acme-v02.api.letsencrypt.org/directory \
@@ -25,3 +25,5 @@ docker run --rm -it -v "$(pwd)/dns_chal:/acme-share" -v "$(pwd)/callback_cert:/e
     -d "$1" \
     -d "*.$1" \
     -v
+
+# now that the certs are generated, we need to put them into the right directory

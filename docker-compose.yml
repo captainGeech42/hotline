@@ -16,6 +16,7 @@ services:
     image: "nginx:latest"
     volumes:
       - "./nginx/nginx.conf:/etc/nginx/conf.d/proxy.conf:ro"
+      - "./ssl/callback_cert:/callback_cert:ro"
     ports:
       - "80:80"
       - "443:443"
