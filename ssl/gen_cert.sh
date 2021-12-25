@@ -27,7 +27,7 @@ docker run --rm -it -v "$(pwd)/dns_chal:/acme-share" -v "$(pwd)/letsencrypt:/etc
     -v
 
 # now that the certs are generated, we need to put them into the right directory
-mkdir -p calback_cert # this should already exist, but just to be safe, make it
+mkdir -p callback_cert # this should already exist, but just to be safe, make it
 
 fullchain_path=$(realpath letsencrypt/live/$1/fullchain.pem)
 privkey_path=$(realpath letsencrypt/live/$1/privkey.pem)
