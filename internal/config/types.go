@@ -9,6 +9,7 @@ type Dns struct {
 	Port               int    `yaml:"port"`
 	DefaultAResponse   string `yaml:"default_A_response"`
 	DefaultTXTResponse string `yaml:"default_TXT_response"`
+	AcmeChallengePath  string `yaml:"acme_challenge_path"`
 }
 
 type Callback struct {

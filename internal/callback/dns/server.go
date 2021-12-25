@@ -16,6 +16,7 @@ import (
 var callbackDomain string
 var defaultAResponse net.IP
 var defaultTXTResponse []string
+var acmeChallengePath string
 
 type dnsHandler struct{}
 
@@ -26,11 +27,23 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 	// send the response at the end
 	defer w.WriteMsg(&msg)
 
-	reqDomain := r.Question[0].Name
+	// according to the RFC, DNS is supposed to be case insensitive
+	// TODO: think about this more, maybe should be user controllable?
+	// acme stuff is wonky casing, that part at least needs to be lowercased
+	reqDomain := strings.ToLower(r.Question[0].Name)
 	qtype := qtypeMapping[r.Question[0].Qtype]
 
 	srcIP := strings.Split(w.RemoteAddr().String(), ":")[0]
 	log.Printf("got a DNS %s request from %v for %s\n", qtype, srcIP, reqDomain)
+
+	// check if we are handling ACME responses
+	if qtype == "TXT" && doesAcmeChalRespExist(reqDomain) {
+		log.Println("handling ACME challenge response")
+
+		setAcmeChalRRs(reqDomain, &msg)
+
+		return
+	}
 
 	// make sure the domain being queried is the callback domain
 	if !strings.HasSuffix(reqDomain, callbackDomain+".") {
@@ -89,6 +102,7 @@ func StartServer(cfg *config.Config) {
 	callbackDomain = cfg.Server.Callback.Domain
 	defaultAResponse = net.ParseIP(cfg.Server.Callback.Dns.DefaultAResponse)
 	defaultTXTResponse = []string{cfg.Server.Callback.Dns.DefaultTXTResponse}
+	acmeChallengePath = cfg.Server.Callback.Dns.AcmeChallengePath
 
 	// start the server
 	log.Printf("starting dns callback listener on %s\n", addr)

@@ -32,6 +32,14 @@ server:
       default_TXT_response: "research by @captainGeech42 using hotline"
 
       # other types of DNS requests still get logged, but don't have a custom response returned
+
+      # for an SSL cert to be issued for the callback domain, a custom TXT response
+      # needs to be served to the ACME servers operated by Let's Encrypt
+      # the default value ("/acme/response") is used in the provided docker setup
+      # if you don't care about SSL and don't want a custom TXT response for ACME
+      # challenges to be served, you can set this to ""
+      # for additional info, see the docs on SSL configuration at ssl/setup.md
+      acme_challenge_path: "/acme/response"
   
   # config items for the front-end web app and the backing API
   web:

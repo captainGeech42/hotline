@@ -39,6 +39,8 @@ $ sudo mv /etc/resolv.conf /etc/resolv.conf.bak
 $ echo -e "nameserver 8.8.8.8\nnameserver 8.8.4.4" | sudo tee /etc/resolv.conf
 ```
 
+If you'd like to setup SSL certificates, please read [these docs](/ssl/setup.md).
+
 ### Client Setup
 
 Now that you have a Hotline server running, you can setup a client. First, install Hotline:
