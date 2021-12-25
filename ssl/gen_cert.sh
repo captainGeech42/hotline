@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $# -ne 2 ]]; then
-    echo "usage: gen_cert.sh [callback domain] [path to acme challenge response directory]" 2>&1
+    echo "usage: gen_cert.sh [callback domain]" 2>&1
     exit 2
 fi
 
@@ -16,7 +16,7 @@ fi
 docker pull captaingeech/certbot-dns-hotline:latest
 
 # generate the certificates
-docker run --rm -it -v "$2:/acme-share" captaingeech/certbot-dns-hotline:latest certonly \
+docker run --rm -it -v "$(pwd)/dns_chal:/acme-share" -v "$(pwd)/callback_cert:/etc/letsencrypt/live/$1" captaingeech/certbot-dns-hotline:latest certonly \
     --authenticator dns-hotline \
     --dns-hotline-path /acme-share \
     --server https://acme-v02.api.letsencrypt.org/directory \
