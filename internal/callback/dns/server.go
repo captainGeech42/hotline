@@ -4,10 +4,8 @@ package dns
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"net"
-	"os"
 	"strings"
 
 	"github.com/captainGeech42/hotline/internal/config"
@@ -39,33 +37,10 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 	log.Printf("got a DNS %s request from %v for %s\n", qtype, srcIP, reqDomain)
 
 	// check if we are handling ACME responses
-	if doesAcmeChalRespExist(reqDomain) {
+	if qtype == "TXT" && doesAcmeChalRespExist(reqDomain) {
 		log.Println("handling ACME challenge response")
 
-		// open the acme challenge response file
-		chalRespPath := getPathForAcmeChallenge(reqDomain)
-		file, err := os.Open(chalRespPath)
-		if err != nil {
-			log.Println("error opening the ACME challenge response file")
-			log.Println(err)
-			return
-		}
-		defer file.Close()
-
-		// read in the file
-		responseBytes, err := io.ReadAll(file)
-		if err != nil {
-			log.Println("error reading the ACME challenge response file")
-			log.Println(err)
-			return
-		}
-
-		// set the TXT response
-		log.Println("returning the ACME challenge response from disk")
-		msg.Answer = append(msg.Answer, &dns.TXT{
-			Hdr: dns.RR_Header{Name: msg.Question[0].Name, Rrtype: dns.TypeTXT, Class: dns.ClassINET, Ttl: 60},
-			Txt: []string{string(responseBytes)},
-		})
+		setAcmeChalRRs(reqDomain, &msg)
 
 		return
 	}

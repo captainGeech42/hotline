@@ -12,8 +12,10 @@ if [[ $? -ne 0 ]]; then
     exit 1
 fi
 
+# pull the latest image
+docker pull captaingeech/certbot-dns-hotline:latest
+
 # generate the certificates
-#docker run --rm -it -v "$2:/acme-share" certbot-hotline certonly \
 docker run --rm -it -v "$2:/acme-share" captaingeech/certbot-dns-hotline:latest certonly \
     --authenticator dns-hotline \
     --dns-hotline-path /acme-share \
