@@ -117,7 +117,7 @@ Global Flags:
 
 The main configuration item for running a server (besides the `hotline.yml` file) is setting the `$HOTLINE_APP` environment variable to one of the following options:
 
-* `web`: To run the API backend and serve the React SPA frontend
+* `web`: To run the API backend
 * `http`: To run the HTTP callback service
 * `dns`: To run the DNS callback service
 
