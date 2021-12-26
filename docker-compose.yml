@@ -16,6 +16,7 @@ services:
     image: "nginx:latest"
     volumes:
       - "./nginx/nginx.conf:/etc/nginx/conf.d/proxy.conf:ro"
+      - "./spa/build:/spa:ro"
       - "./ssl/callback_cert:/callback_cert:ro"
       - "./ssl/app_cert:/app_cert:ro"
       - "./ssl/http_chal:/acme-chal:ro"
