@@ -1,0 +1,15 @@
+# this dockerfile is used to setup a build environment for the React SPA used by Hotline
+# it is NOT used to serve the app
+
+FROM node:17
+
+RUN mkdir /app
+WORKDIR /app
+
+# dependencies
+COPY spa/package*json .
+RUN npm i
+
+# copy in the source
+COPY spa/public/ ./public
+COPY spa/src/ ./src
