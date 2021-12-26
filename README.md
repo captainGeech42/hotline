@@ -47,7 +47,7 @@ If you'd like to setup SSL certificates, please read [these docs](/ssl/setup.md)
 Now that you have a Hotline server running, you can setup a client. First, install Hotline:
 
 ```
-$ go install github.com/captainGeech42/hotline
+$ go install github.com/captainGeech42/hotline@latest
 ```
 
 Then, setup your config in `~/.hotline.yml`:
