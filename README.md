@@ -27,8 +27,9 @@ This enables users of your Hotline server to access it through public DNS server
 2. Copy `.env_sample` to `.env` and edit accordingly
 3. Copy `hotline_sample.yml` to `hotline.yml` and edit accordingly
 4. Copy `nginx/nginx_sample.conf` to `nginx/nginx.conf` and edit accordingly
-4. `docker-compose build`
-5. `docker-compose up`
+5. Generate the React SPA production build: `./build_spa.sh`
+6. Build the Hotline server image: `docker-compose build`
+7. Start the Hotline server + other components: `docker-compose up`
 
 If you already have something running on port 53, you'll need to stop that service. A common example of this is `systemd-resolved`. To permanently stop `systemd-resolved`, do the following:
 
