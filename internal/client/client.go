@@ -41,8 +41,13 @@ func getCallbackName(cbName string, cfg *config.Config) (string, string, bool) {
 }
 
 // get requests for the callback
-func getRequests(cbName string, since time.Time, cfg *config.Config) (*[]schema.CbHttpRequest, *[]schema.CbDnsRequest) {
-	req := schema.GetCbRequestsRequest{Name: cbName, All: false, AfterTs: since}
+func getRequests(cbName string, since *time.Time, cfg *config.Config) (*[]schema.CbHttpRequest, *[]schema.CbDnsRequest) {
+	req := schema.GetCbRequestsRequest{Name: cbName}
+	if since == nil {
+		req.All = true
+	} else {
+		req.AfterTs = *since
+	}
 
 	respBytes, err := makeReq(cfg.Client.ServerUrl, "/api/callback/requests", "GET", req)
 	if err != nil {
@@ -118,6 +123,18 @@ func printHttpRequest(req schema.CbHttpRequest) {
 	fmt.Printf("\t\033[1mNew HTTP Request\033[0m\n\n\t Source IP:\t%s\n\t   Request:\t%s %s\n\t      Host:\t%s\n\n\t   Headers:\t%s\n\t      Body:\t%s\n\n\n", req.SourceIP, req.Method, req.URI, req.Host, headerStr, bodyStr)
 }
 
+func retrieveAndDisplayRequests(cbName string, since *time.Time, cfg *config.Config) {
+	httpReqs, dnsReqs := getRequests(cbName, since, cfg)
+
+	for _, req := range *dnsReqs {
+		printDnsRequest(req)
+	}
+
+	for _, req := range *httpReqs {
+		printHttpRequest(req)
+	}
+}
+
 // run the hotline client
 // prefCbName: the preferred callback name from the cli args
 // showHistorical: true if client wants all callbacks for an existing cb logged
@@ -138,11 +155,15 @@ func StartClient(prefCbname string, showHistorical bool, cfg *config.Config) {
 	fmt.Println("===========================================================================")
 	fmt.Println("")
 
+	if showHistorical {
+		retrieveAndDisplayRequests(cbName, nil, cfg)
+	}
+
 	for {
 		since := time.Now()
 		time.Sleep(1 * time.Second)
 
-		httpReqs, dnsReqs := getRequests(cbName, since, cfg)
+		httpReqs, dnsReqs := getRequests(cbName, &since, cfg)
 
 		for _, req := range *dnsReqs {
 			printDnsRequest(req)

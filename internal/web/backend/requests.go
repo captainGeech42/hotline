@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/captainGeech42/hotline/internal/db"
 	"github.com/captainGeech42/hotline/internal/web/schema"
@@ -43,12 +44,19 @@ func getCbRequests(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var afterTs *time.Time
+	if cbReqBody.All {
+		afterTs = nil
+	} else {
+		afterTs = &cbReqBody.AfterTs
+	}
+
 	// get the dns requests from the db
-	dnsDbReqs := db.GetDnsRequests(cbReqBody.Name, &cbReqBody.AfterTs)
+	dnsDbReqs := db.GetDnsRequests(cbReqBody.Name, afterTs)
 	dnsReqs := ConvertDnsDbToJson(&dnsDbReqs)
 
 	// get the http requests from the db
-	httpDbReqs := db.GetHttpRequests(cbReqBody.Name, &cbReqBody.AfterTs)
+	httpDbReqs := db.GetHttpRequests(cbReqBody.Name, afterTs)
 	httpReqs := ConvertHttpDbToJson(&httpDbReqs)
 
 	// build resp object

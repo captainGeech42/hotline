@@ -92,9 +92,7 @@ func AddHttpRequest(cbName string, uri string, host string, method string, heade
 func GetHttpRequests(cbName string, since *time.Time) []HttpRequest {
 	var httpReqs []HttpRequest
 
-	// cb := GetCallback(cbName)
-
-	query := dbHandle.Joins("Callback", dbHandle.Where(&Callback{Name: cbName}))
+	query := dbHandle.Table("http_requests").Joins("Callback").Where("Callback.name = ?", cbName)
 	if since != nil {
 		query = query.Where("`http_requests`.`created_at` >= ?", since)
 	}
@@ -110,7 +108,7 @@ func GetHttpRequests(cbName string, since *time.Time) []HttpRequest {
 func GetDnsRequests(cbName string, since *time.Time) []DnsRequest {
 	var dnsReqs []DnsRequest
 
-	query := dbHandle.Joins("Callback", dbHandle.Where(&Callback{Name: cbName}))
+	query := dbHandle.Table("dns_requests").Joins("Callback").Where("Callback.name = ?", cbName)
 	if since != nil {
 		query = query.Where("`dns_requests`.`created_at` >= ?", since)
 	}
