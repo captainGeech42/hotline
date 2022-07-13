@@ -94,3 +94,14 @@ func setAcmeChalRRs(domain string, msg *dns.Msg) error {
 
 	return nil
 }
+
+func setAcmeCAAResp(domain string, msg *dns.Msg) error {
+	msg.Answer = append(msg.Answer, &dns.CAA{
+		Hdr:   dns.RR_Header{Name: msg.Question[0].Name, Rrtype: dns.TypeCAA, Class: dns.ClassINET, Ttl: 60},
+		Flag:  0,
+		Tag:   "issue",
+		Value: "letsencrypt.org",
+	})
+
+	return nil
+}

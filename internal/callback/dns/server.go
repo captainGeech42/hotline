@@ -45,6 +45,15 @@ func (handler *dnsHandler) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 		return
 	}
 
+	// check if we have a CAA request
+	if qtype == "CAA" {
+		log.Println("handling ACME CAA request")
+
+		setAcmeCAAResp(reqDomain, &msg)
+
+		return
+	}
+
 	// make sure the domain being queried is the callback domain
 	if !strings.HasSuffix(reqDomain, callbackDomain+".") {
 		log.Println("DNS request wasn't for a callback domain")
